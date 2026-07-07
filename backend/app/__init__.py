@@ -1,0 +1,1 @@
+"""MatchMind AI application package."""
