@@ -1,321 +1,246 @@
-# MatchMind AI - Milestone 1: Data Foundation
+# ⚽ MatchMind AI
 
-A production-ready data pipeline for processing football match data for machine learning.
+> An AI-powered football match prediction platform built using Machine Learning, feature engineering, and statistical analysis.
 
-## Project Overview
+![Python](https://img.shields.io/badge/Python-3.12-blue)
+![Status](https://img.shields.io/badge/Status-Active-success)
+![License](https://img.shields.io/badge/License-MIT-green)
+![Version](https://img.shields.io/badge/Version-v0.1-orange)
 
-MatchMind AI is a commercial SaaS platform for intelligent football match analysis and prediction. Milestone 1 establishes the complete data foundation with a robust, fully-typed, modular pipeline.
+---
 
-## Architecture
+# 📖 Overview
 
-```
-backend/
-├── app/
-│   └── data/
-│       ├── __init__.py           # Package exports
-│       ├── schema.py             # Dataset schema definition
-│       ├── exceptions.py         # Custom exceptions
-│       ├── logger.py             # Logging utility
-│       ├── data_loader.py        # CSV loading and combining
-│       ├── validator.py          # Data validation
-│       ├── cleaner.py            # Data cleaning
-│       └── preprocessor.py       # ML preprocessing
-tests/
-├── __init__.py
-├── test_data_loader.py          # Loader unit tests
-├── test_validator.py            # Validator unit tests
-└── test_cleaner.py              # Cleaner unit tests
-data/
-├── raw/                         # Input data directory
-└── processed/                   # Output data directory
-```
+MatchMind AI is an end-to-end machine learning platform that predicts football match outcomes using historical match data, advanced feature engineering, and modern machine learning techniques.
 
-## Modules
+Unlike simple prediction scripts, MatchMind AI is designed with production-ready architecture, modular components, automated validation, and scalable machine learning pipelines.
 
-### 1. schema.py
-Defines the football match dataset schema with all required columns, data types, and validation rules. Provides a centralized source of truth for data structure.
+---
 
-**Key Classes:**
-- `FootballMatchSchema`: Schema definition with column management
-- `DataType`: Enum for supported data types
+# ✨ Features
 
-### 2. exceptions.py
-Custom exception hierarchy for the pipeline. All exceptions inherit from `MatchMindAIException` for unified error handling.
+## Data Pipeline
 
-**Key Exceptions:**
-- `DataValidationError`: Raised when validation fails
-- `MissingColumnError`: Missing required columns
-- `DuplicateRowError`: Duplicate rows detected
-- `NullValueError`: Null values found
-- `InvalidDateError`: Invalid date formats
-- `InvalidScoreError`: Invalid match scores
-- `InvalidTeamNameError`: Invalid team names
-- `DatasetNotFoundError`: Dataset not found
-- `InvalidDatasetError`: CSV read errors
-- `SchemaMismatchError`: Schema validation failure
-
-### 3. logger.py
-Reusable logging utility with consistent formatting across all modules.
-
-**Features:**
-- Timestamp, module name, level, and message in each log
-- Console and optional file output
-- Module-specific loggers
-
-### 4. data_loader.py
-Loads and combines CSV files from the data directory.
-
-**Key Methods:**
-- `load_csv()`: Load individual CSV file
-- `load_matches()`: Load all or specific files
-- `discover_csv_files()`: Find CSV files in directory
-- `load_and_combine()`: Load and combine specific files
-
-**Features:**
-- CSV file discovery
-- Automatic combining of multiple files
-- Graceful error handling
-- Missing file detection
-
-### 5. validator.py
-Comprehensive data validation against schema and business rules.
-
-**Key Methods:**
-- `validate()`: Complete validation pipeline
-- `validate_schema()`: Check required columns
-- `_validate_duplicates()`: Detect duplicate rows
-- `_validate_null_values()`: Check for nulls
-- `_validate_dates()`: Validate date formats
-- `_validate_scores()`: Validate match scores
-- `_validate_team_names()`: Validate team names
-
-**Features:**
-- Detailed validation reports
-- Multiple validation checks
-- Clear error messages
-- Warning and error logging
-
-### 6. cleaner.py
-Data cleaning and standardization operations.
-
-**Key Methods:**
-- `clean()`: Complete cleaning pipeline
-- `remove_duplicates()`: Remove duplicate rows
-- `standardize_team_names()`: Normalize team names
-- `convert_dates()`: Parse date strings
-- `convert_data_types()`: Type conversion
-- `fill_missing_values()`: Handle nulls
-- `sort_chronologically()`: Sort by date
-
-**Features:**
-- Duplicate removal with first-occurrence preservation
-- Whitespace trimming
-- Date format flexibility
-- Type safety
+- CSV ingestion
+- Data validation
+- Data cleaning
 - Chronological ordering
+- Metadata generation
 
-### 7. preprocessor.py
-Prepare cleaned data for machine learning.
+---
 
-**Key Methods:**
-- `preprocess()`: Complete preprocessing pipeline
-- `encode_categorical_columns()`: Convert categories to numeric
-- `normalize_numeric_columns()`: StandardScaler normalization
-- `split_train_test()`: Stratified train/test split
-- `save_dataset()`: Export processed data
-- `prepare_features()`: Extract features
-- `prepare_labels()`: Extract labels
+## History Engine
 
-**Features:**
-- Categorical encoding with LabelEncoder
-- Numeric normalization with StandardScaler
-- Train/test splitting
-- Reproducible random states
-- Encoder/scaler persistence
+- Team history
+- Match history
+- Head-to-head history
+- Cached historical lookups
 
-## Data Flow
+---
+
+## Feature Engineering
+
+- Recent Form
+- Goal Difference
+- Team Performance
+- Home Advantage
+- Rest Days
+- Head-to-Head Statistics
+
+---
+
+## Validation Engine
+
+- Missing value detection
+- Duplicate detection
+- Leakage detection
+- Correlation analysis
+- Dataset quality reports
+
+---
+
+## Machine Learning (In Progress)
+
+- Dataset Builder
+- Logistic Regression
+- Random Forest
+- XGBoost
+- LightGBM
+- CatBoost
+
+---
+
+# 🏗 Project Architecture
 
 ```
-CSV Files
-    ↓
-[DataLoader] → Discover & Load
-    ↓
-[DataValidator] → Validate Schema & Quality
-    ↓
-[DataCleaner] → Clean & Standardize
-    ↓
-[DataPreprocessor] → Encode & Normalize
-    ↓
-Processed Data (Train/Test split)
+Raw Match Data
+        │
+        ▼
+Data Pipeline
+        │
+        ▼
+History Engine
+        │
+        ▼
+Feature Engineering
+        │
+        ▼
+Validation Engine
+        │
+        ▼
+Dataset Builder
+        │
+        ▼
+Machine Learning Models
+        │
+        ▼
+Prediction API
+        │
+        ▼
+Web Dashboard
 ```
 
-## Usage Example
+---
 
-```python
-from backend.app.data import (
-    DataLoader,
-    DataValidator,
-    DataCleaner,
-    DataPreprocessor,
-    PipelineLogger,
-)
+# 📂 Project Structure
 
-# Initialize logging
-PipelineLogger.initialize()
+```
+MatchMind-AI/
 
-# Load data
-loader = DataLoader("data/raw")
-df = loader.load_matches()
+backend/
+tests/
+scripts/
+docs/
+data/
 
-# Validate
-validator = DataValidator()
-report = validator.validate(df)
-
-# Clean
-cleaner = DataCleaner()
-df_clean = cleaner.clean(df)
-
-# Preprocess
-preprocessor = DataPreprocessor()
-train_df, test_df = preprocessor.preprocess(df_clean)
-
-# Save
-preprocessor.save_dataset(train_df, "data/processed", "train")
-preprocessor.save_dataset(test_df, "data/processed", "test")
+README.md
+LICENSE
+.gitignore
+requirements.txt
 ```
 
-## Pipeline Orchestration and CLI
+---
 
-The project now includes enterprise-grade pipeline orchestration with
-centralized configuration, dataset metadata versioning, execution reporting,
-and command line execution support.
+# 🚀 Current Progress
 
-Run the pipeline from the repository root:
+| Phase | Status |
+|--------|--------|
+| Data Pipeline | ✅ Complete |
+| History Engine | ✅ Complete |
+| Feature Engineering | ✅ Complete |
+| Validation Engine | ✅ Complete |
+| Integration Testing | ✅ Complete |
+| Dataset Builder | 🔄 In Progress |
+| Model Training | ⏳ Planned |
+| Prediction API | ⏳ Planned |
+| Dashboard | ⏳ Planned |
+
+---
+
+# 🛠 Tech Stack
+
+- Python
+- Pandas
+- NumPy
+- Scikit-learn
+- Pytest
+- Git
+- GitHub
+
+Planned
+
+- XGBoost
+- LightGBM
+- CatBoost
+- FastAPI
+- React
+
+---
+
+# ⚙ Installation
 
 ```bash
-python scripts/run_pipeline.py
+git clone https://github.com/Adnan-code55/MatchMind-AI.git
+
+cd MatchMind-AI
+
+pip install -r requirements.txt
 ```
 
-Override runtime values:
+---
+
+# 🧪 Running Tests
 
 ```bash
-python scripts/run_pipeline.py --league EPL --season 2024 --source data/raw --output data/processed
+pytest
 ```
 
-Generated artifacts:
-- `reports/pipeline_report_<execution_id>.json`
-- `metadata/<league>_<season>_v<version>.json`
-- `logs/pipeline_<execution_id>.log`
+---
 
-## Testing
+# 🗺 Roadmap
 
-Comprehensive pytest test suite covering all modules.
+## Version 0.1
 
-```bash
-# Run all tests
-pytest tests/ -v
+- Data Pipeline
+- History Engine
+- Feature Engineering
+- Validation
 
-# Run specific test file
-pytest tests/test_data_loader.py -v
+✅ Complete
 
-# Run with coverage
-pytest tests/ --cov=backend.app.data
-```
+---
 
-**Test Coverage:**
-- `test_data_loader.py`: 20+ tests covering discovery, loading, combining, error handling
-- `test_validator.py`: 25+ tests covering all validation rules and edge cases
-- `test_cleaner.py`: 25+ tests covering cleaning operations and data consistency
+## Version 0.2
 
-## Dataset Schema
+- Dataset Builder
+- Chronological Splitting
+- Dataset Metadata
 
-### Required Columns (16)
+---
 
-| Column | Type | Description |
-|--------|------|-------------|
-| Date | datetime | Match date |
-| HomeTeam | string | Home team name |
-| AwayTeam | string | Away team name |
-| FTHG | int | Full-time home goals |
-| FTAG | int | Full-time away goals |
-| FTR | string | Full-time result (H/D/A) |
-| HS | int | Home shots |
-| AS | int | Away shots |
-| HST | int | Home shots on target |
-| AST | int | Away shots on target |
-| HC | int | Home corners |
-| AC | int | Away corners |
-| HY | int | Home yellow cards |
-| AY | int | Away yellow cards |
-| HR | int | Home red cards |
-| AR | int | Away red cards |
+## Version 0.3
 
-### Schema Management
+- Logistic Regression
+- Random Forest
+- XGBoost
+- Model Evaluation
 
-Add new columns:
-```python
-from backend.app.data import FootballMatchSchema, DataType
+---
 
-FootballMatchSchema.add_column(
-    "NewColumn",
-    DataType.FLOAT,
-    optional=True,
-    categorical=False
-)
-```
+## Version 0.4
 
-## Code Quality
+- Prediction API
 
-- **PEP 8 Compliant**: All code follows PEP 8 style guide
-- **Type Hints**: Complete type annotations throughout
-- **Google Docstrings**: All functions fully documented
-- **SOLID Principles**: Single responsibility, open/closed, etc.
-- **DRY**: No code duplication
-- **Error Handling**: Graceful error handling with custom exceptions
-- **Logging**: Comprehensive logging for debugging
+---
 
-## Requirements
+## Version 0.5
 
-- Python 3.12+
-- pandas
-- numpy
-- scikit-learn
-- pytest (for testing)
+- React Dashboard
 
-## Error Handling
+---
 
-All public functions handle errors gracefully with:
-- Custom exception types
-- Detailed error messages
-- Error logging
-- Logging of failures and warnings
-- Proper exception chaining
+## Version 1.0
 
-## Logging
+- Public Release
+- Continuous Model Training
+- Live Match Predictions
 
-Logs include:
-- Timestamp (YYYY-MM-DD HH:MM:SS)
-- Module name
-- Log level (INFO, WARNING, ERROR, DEBUG, CRITICAL)
-- Message
+---
 
-## Future Extensions
+# 🤝 Contributing
 
-Milestone 1 provides the foundation for:
-- Feature engineering (Milestone 2)
-- Model training and evaluation (Milestone 3)
-- API endpoints (Milestone 4)
-- Web frontend (Milestone 5)
+Contributions, suggestions, and bug reports are welcome.
 
-## Notes
+---
 
-- No placeholder code or TODOs
-- All implementations are complete and production-ready
-- Fully modular and reusable components
-- Ready for integration with ML models
-- Designed for horizontal scaling
+# 📄 License
 
-## Author
+This project is licensed under the MIT License.
 
-MatchMind AI Development Team
-Version: 1.0.0
+---
+
+# 👨‍💻 Author
+
+**Adnan Choudry**
+
+Developed as a long-term machine learning project focused on football analytics and predictive modeling.
