@@ -40,7 +40,15 @@ class FeaturePipeline:
 
     def _build_generators(self) -> List[FeatureGenerator]:
         """Instantiate feature generators in the configured order."""
+        import sys
         self.logger.info("Building feature generators from registry.")
+        # When registry is empty after a reset, clean up cached generator modules
+        # so that discover_generators() will reimport them and trigger decorators.
+        if not self.registry.list_generators():
+            package_name = "backend.app.features"
+            for key in list(sys.modules.keys()):
+                if key.startswith(package_name + ".") and not key.endswith(("registry", "base", "combiner", "pipeline")):
+                    del sys.modules[key]
         self.registry.discover_generators()
         instances = self.registry.instantiate_all(
             configs=self.generator_configs,
