@@ -180,7 +180,7 @@ class TestLoadCSV:
         df = loader.load_csv(csv_path)
 
         for col in df.columns:
-            assert df[col].dtype == "object"
+            assert df[col].dtype in ["object", "string"]
 
 
 class TestLoadMatches:

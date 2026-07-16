@@ -252,8 +252,8 @@ class TestConvertDataTypes:
         df = sample_raw_dataframe.copy()
         result = cleaner.convert_data_types(df)
 
-        assert result["HomeTeam"].dtype == "object"
-        assert result["AwayTeam"].dtype == "object"
+        assert result["HomeTeam"].dtype in ["object", "string"]
+        assert result["AwayTeam"].dtype in ["object", "string"]
 
     def test_convert_date_to_datetime(self, cleaner, sample_raw_dataframe):
         """Test conversion of date to datetime64."""
@@ -305,10 +305,10 @@ class TestFillMissingValues:
         df = pd.DataFrame({
             "Date": ["2023-01-01", "2023-01-02"],
             "HomeTeam": ["Arsenal", "Chelsea"],
-            "AwayTeam": ["Liverpool", None],
+            "AwayTeam": ["Liverpool", "Manchester"],
             "FTHG": ["2", "1"],
             "FTAG": ["1", "0"],
-            "FTR": ["H", "H"],
+            "FTR": ["H", None],
             "HS": ["10", "8"],
             "AS": ["6", "4"],
             "HST": ["5", "3"],
@@ -322,7 +322,7 @@ class TestFillMissingValues:
         })
 
         result = cleaner.fill_missing_values(df)
-        assert result.loc[1, "AwayTeam"] == "Unknown"
+        assert result.loc[1, "FTR"] == "Unknown"
 
     def test_remove_rows_with_critical_nulls(self, cleaner):
         """Test removal of rows with critical missing values."""

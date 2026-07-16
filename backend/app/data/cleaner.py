@@ -239,6 +239,8 @@ class DataCleaner:
             df = df.copy()
             initial_rows = len(df)
 
+            df = df.dropna(subset=["Date", "HomeTeam", "AwayTeam"])
+
             numeric_cols = self.schema.get_numeric_columns()
             for col in numeric_cols:
                 if col in df.columns and df[col].isnull().any():
@@ -248,8 +250,6 @@ class DataCleaner:
             for col in categorical_cols:
                 if col in df.columns and df[col].isnull().any():
                     df[col] = df[col].fillna("Unknown")
-
-            df = df.dropna(subset=["Date", "HomeTeam", "AwayTeam"])
 
             final_rows = len(df)
             removed_rows = initial_rows - final_rows

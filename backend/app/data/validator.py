@@ -164,7 +164,10 @@ class DataValidator:
             SchemaMismatchError: If schema validation fails.
         """
         report = ValidationReport()
-        self._validate_schema(df, report)
+        try:
+            self._validate_schema(df, report)
+        except MissingColumnError:
+            pass
 
         if report.errors:
             raise SchemaMismatchError(

@@ -444,6 +444,8 @@ class TestEdgeCases:
 
     def test_validate_large_dataset(self, validator, sample_valid_dataframe):
         """Test validation on large dataset."""
+        # Create a large dataset with unique rows by modifying Date or HomeTeam
         df = pd.concat([sample_valid_dataframe] * 100, ignore_index=True)
+        df["Date"] = pd.date_range("2023-01-01", periods=len(df))
         report = validator.validate(df)
         assert report.is_valid is True
